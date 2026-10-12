@@ -1,0 +1,212 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   Lapis & pyrite design tokens. Everything in the UI reads from these.
+   ------------------------------------------------------------------ */
+@theme {
+  --color-lapis-deep: #131a33;
+  --color-lapis-bg: #1a2240;
+  --color-lapis-surface: #232c4d;
+  --color-lapis-elevated: #2c3659;
+  --color-lapis-border: #3a4468;
+  --color-lapis-pure: #34488a;
+  --color-lapis-muted: #6e7896;
+  --color-lapis-secondary: #8f98b3;
+  --color-gold: #cbb27a;
+  --color-gold-hover: #d8c190;
+  --color-gold-pressed: #b39c66;
+  --color-ivory: #eae7df;
+  --color-ivory-light: #f5f3ee;
+  --color-sage: #6fa58c;
+  --color-dusty-red: #c27a7a;
+
+  /* Cinzel and Plus Jakarta Sans have no basic Cyrillic. Cormorant SC and Inter
+     carry the Ukrainian glyphs; Latin letters and digits stay in the brand faces. */
+  --font-display: "Cinzel", "Cormorant SC", Georgia, serif;
+  --font-serif: "Lora", Georgia, "Times New Roman", serif;
+  --font-sans: "UI Apostrophe", "Plus Jakarta Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 10px;
+  --radius-xl: 14px;
+
+  --animate-live-pulse: live-pulse 1.8s ease-in-out infinite;
+  --animate-sheet-right: sheet-right 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-sheet-up: sheet-up 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  --animate-fade-in: fade-in 180ms ease-out;
+  --animate-pop-in: pop-in 160ms ease-out;
+
+  @keyframes live-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.35; }
+  }
+  @keyframes sheet-right {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+  }
+  @keyframes sheet-up {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes pop-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+}
+
+/* Plus Jakarta Sans pairs its own wide apostrophe with Inter's Cyrillic, leaving a gap in
+   words like «Прем’єр». Borrow Inter's apostrophe for the UI face only. */
+@font-face {
+  font-family: "UI Apostrophe";
+  font-style: normal;
+  font-weight: 100 500;
+  font-display: swap;
+  src: url("../node_modules/@fontsource/inter/files/inter-latin-400-normal.woff2") format("woff2");
+  unicode-range: U+2019, U+02BC, U+0027;
+}
+@font-face {
+  font-family: "UI Apostrophe";
+  font-style: normal;
+  font-weight: 600 900;
+  font-display: swap;
+  src: url("../node_modules/@fontsource/inter/files/inter-latin-600-normal.woff2") format("woff2");
+  unicode-range: U+2019, U+02BC, U+0027;
+}
+
+/* shadcn/ui semantic tokens, mapped onto the lapis palette */
+:root {
+  --background: var(--color-lapis-bg);
+  --foreground: var(--color-ivory);
+  --card: var(--color-lapis-surface);
+  --card-foreground: var(--color-ivory);
+  --popover: var(--color-lapis-elevated);
+  --popover-foreground: var(--color-ivory);
+  --primary: var(--color-gold);
+  --primary-foreground: var(--color-lapis-deep);
+  --secondary: var(--color-lapis-elevated);
+  --secondary-foreground: var(--color-ivory);
+  --muted: var(--color-lapis-surface);
+  --muted-foreground: var(--color-lapis-secondary);
+  --accent: var(--color-lapis-elevated);
+  --accent-foreground: var(--color-ivory-light);
+  --destructive: var(--color-dusty-red);
+  --border: var(--color-lapis-border);
+  --input: var(--color-lapis-border);
+  --ring: var(--color-gold);
+  --radius: 10px;
+
+  /* measured at runtime by useHeaderOffset(); fallback for first paint */
+  --header-h: 104px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+}
+
+@layer base {
+  html {
+    background: var(--color-lapis-deep);
+    scroll-padding-top: calc(var(--header-h) + 16px);
+    -webkit-text-size-adjust: 100%;
+    text-rendering: optimizeLegibility;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    html { scroll-behavior: smooth; }
+  }
+  body {
+    min-height: 100%;
+    background: var(--color-lapis-bg);
+    color: var(--color-ivory);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--color-gold) 35%, transparent);
+    color: var(--color-ivory-light);
+  }
+  :focus-visible {
+    outline: 1px solid var(--color-gold);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+}
+
+/* Barely visible lapis stone: cloudy blue mineral plus rare pyrite flecks.
+   Used only in the hero banner and the footer. */
+@utility lapis-texture {
+  position: relative;
+  isolation: isolate;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.3;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='1600' height='1000' viewBox='0 0 1600 1000' preserveAspectRatio='xMidYMid slice'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.0028 0.0052' numOctaves='5' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 0.22 0 0 0 0 0.30 0 0 0 0 0.60 1.5 0 0 0 -0.62'/%3E%3C/filter%3E%3Cfilter id='p' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='1' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.80 0 0 0 0 0.70 0 0 0 0 0.48 0 0 0 14 -12.1'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23p)' opacity='0.8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+  }
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+@utility scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-lapis-border) transparent;
+}
+
+@utility fade-x {
+  mask-image: linear-gradient(to right, transparent 0, #000 20px, #000 calc(100% - 28px), transparent 100%);
+}
+
+@utility tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+}
+
+/* Club crest silhouettes (clip paths live in <CrestDefs/>) */
+@utility crest-heater { clip-path: url(#crest-heater); }
+@utility crest-angular { clip-path: url(#crest-angular); }
+@utility crest-round { clip-path: circle(50% at 50% 50%); }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
